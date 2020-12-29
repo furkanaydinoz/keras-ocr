@@ -143,9 +143,13 @@ def drawAnnotations(image, predictions, ax=None):
     right = []
     for word, box in predictions:
         if box[:, 0].min() < image.shape[1] / 2:
-            left.append((word, box))
+            for label in labeled:
+                if label == word:
+                    left.append((word, box))
         else:
-            right.append((word, box))
+            for label in labeled:
+                if label == word:
+                    right.append((word, box))
     ax.set_yticks([])
     ax.set_xticks([])
     for side, group in zip(['left', 'right'], [left, right]):
@@ -161,13 +165,13 @@ def drawAnnotations(image, predictions, ax=None):
                             'arrowstyle': '->',
                             'color': 'r'
                         },
-                        color='r',
-                        fontsize=14,
+                        color='g',
+                        fontsize=24,
                         horizontalalignment='right' if side == 'left' else 'left')
     return ax
 
 
-def drawBoxes(image, boxes, color=(255, 0, 0), thickness=5, boxes_format='boxes'):
+def drawBoxes(image, boxes, color=(255, 0, 0), thickness=3, boxes_format='boxes'):
     """Draw boxes onto an image.
 
     Args:
